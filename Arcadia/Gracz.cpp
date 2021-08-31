@@ -1,14 +1,26 @@
 #include "Gracz.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/CapsuleComponent.h"
+//#include "PaperFlipbookComponent.h"
 
 AGracz::AGracz()
 {
  	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
-	MainMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh_1"));
-	RootComponent = MainMesh;
+	//MainScene = CreateDefaultSubobject<USceneComponent>(TEXT("MainRoot"));
+
+	//MainMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh_1"));
+	//RootComponent = MainMesh;
+
+	MainCap = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	MainCap->InitCapsuleSize(37.5f, 37.5f);
+	MainCap->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	RootComponent = MainCap;
+
+	//SourceFlipbook = CreateDefaultSubobject<UPaperFlipbook>(TEXT("FlipBook"));
+	//SourceFlipbook->SetupAttachment(RootComponent);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("ArmCamera"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -19,7 +31,7 @@ AGracz::AGracz()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
-	Camera->bUsePawnControlRotation = true;
+	Camera->bUsePawnControlRotation = false;
 
 	MaxSpeed = 300.f;
 	pJump = false;

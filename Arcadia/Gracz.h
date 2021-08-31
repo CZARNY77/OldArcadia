@@ -10,7 +10,13 @@ class ARCADIA_API AGracz : public APawn
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category = "Mesh")
-	class UStaticMeshComponent* MainMesh;
+	class UCapsuleComponent* MainCap;
+
+	//UPROPERTY(EditAnywhere, Category = "Mesh")
+	//class UPaperFlipbook* SourceFlipbook;
+
+	//UPROPERTY(EditAnywhere, Category = "Mesh")
+	//class UStaticMeshComponent* MainMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	class USpringArmComponent* SpringArm;
