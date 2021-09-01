@@ -30,9 +30,6 @@ class ARCADIA_API APaperPawn : public APaperCharacter
 	void UpdateCharacter();
 	void UpdateAnimation();
 
-	void StartedJump(const ETouchIndex::Type FingerIndex, const FVector Location);
-	void StopedJump(const ETouchIndex::Type FingerIndex, const FVector Location);
-
 public:
 	APaperPawn();
 
