@@ -11,7 +11,6 @@ class ARCADIA_API ACorner : public AActor
 {
 	GENERATED_BODY()
 
-
 	UPROPERTY(EditAnywhere, Category = "MeshBlock")
 	class USceneComponent* DummyRoot;
 
@@ -22,6 +21,13 @@ public:
 	// Sets default values for this actor's properties
 	ACorner();
 
+	bool IsInCorner;
+
+	UPROPERTY(EditAnywhere, Category = "Axis")
+	bool AxisX;
+	UPROPERTY(EditAnywhere, Category = "Axis")
+	bool AxisY;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,5 +37,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		void OnOverlapBox(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnOverlapBox(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };
