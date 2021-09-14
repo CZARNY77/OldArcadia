@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Corner.h"
 #include "Components/CapsuleComponent.h"
+#include "Math.h"
 
 // Sets default values
 AGracz2::AGracz2()
@@ -46,6 +47,7 @@ AGracz2::AGracz2()
 
 	X = 0.f;
 	Y = 1.f;
+	Yaw = 0.f;
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +63,16 @@ void AGracz2::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	float CurrentR = SpringArm->GetComponentRotation().Yaw;
+	bool bPosNeg = Yaw >= 0.f;
+	float AddRotation = bPosNeg ? DeltaTime * 90 : DeltaTime * -90;
+
+	if (!FMath::IsNearlyEqual(CurrentR, Yaw, 1.5f)) {
+	
+		FRotator NewRotation = FRotator(0.f, AddRotation, 0.f);
+		SpringArm->AddLocalRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
+	}
+	
 }
 
 void AGracz2::MoveRight(float Val)
@@ -73,20 +85,22 @@ void AGracz2::Action()
 	if (Corner) {
 		//Corner --
 		if ((!Corner->AxisX) && (!Corner->AxisY) && (Y==1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, 90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			Yaw = SpringArm->GetComponentRotation().Yaw + 90.f;
+			//EndR = (SpringArm->GetComponentRotation() + FRotator(0.f, Yaw, 0.f));
+			//SpringArm->SetWorldRotation(EndR);
 			X = -1.f;
 			Y = 0.f;
 		}
 		else if ((!Corner->AxisX) && (!Corner->AxisY) && (X == -1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, -90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			Yaw = SpringArm->GetComponentRotation().Yaw - 90.f;
+			//EndR = (SpringArm->GetComponentRotation() + FRotator(0.f, Yaw, 0.f));
+			//SpringArm->SetWorldRotation(EndR);
 			X = 0.f;
 			Y = 1.f;
 		}
 
 		// Corner -+
-		if ((Corner->AxisX) && (!Corner->AxisY) && (Y == 1)) {
+		/*if ((Corner->AxisX) && (!Corner->AxisY) && (Y == 1)) {
 			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, -90.f, 0.f));
 			SpringArm->SetWorldRotation(CurrentR);
 			X = 1.f;
@@ -125,7 +139,7 @@ void AGracz2::Action()
 			SpringArm->SetWorldRotation(CurrentR);
 			X = 0.f;
 			Y = -1.f;
-		}
+		}*/
 	}
 }
 

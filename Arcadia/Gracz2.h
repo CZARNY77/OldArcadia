@@ -24,6 +24,8 @@ class ARCADIA_API AGracz2 : public ACharacter
 
 	float X;
 	float Y;
+	float Yaw;
+	FRotator EndR;
 public:
 	// Sets default values for this character's properties
 	AGracz2();
