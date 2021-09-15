@@ -22,10 +22,14 @@ class ARCADIA_API AGracz2 : public ACharacter
 	UFUNCTION()
 	void Action();
 
+	UFUNCTION()
+	void SwitchCamera(float dt);
+
 	float X;
 	float Y;
 	float Yaw;
-	FRotator EndR;
+	bool bSwitchCamera;
+	int DirectionCamera;
 public:
 	// Sets default values for this character's properties
 	AGracz2();

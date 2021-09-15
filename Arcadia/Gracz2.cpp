@@ -48,6 +48,7 @@ AGracz2::AGracz2()
 	X = 0.f;
 	Y = 1.f;
 	Yaw = 0.f;
+	bSwitchCamera = false;
 }
 
 // Called when the game starts or when spawned
@@ -63,16 +64,7 @@ void AGracz2::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	float CurrentR = SpringArm->GetComponentRotation().Yaw;
-	bool bPosNeg = Yaw >= 0.f;
-	float AddRotation = bPosNeg ? DeltaTime * 90 : DeltaTime * -90;
-
-	if (!FMath::IsNearlyEqual(CurrentR, Yaw, 1.5f)) {
-	
-		FRotator NewRotation = FRotator(0.f, AddRotation, 0.f);
-		SpringArm->AddLocalRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
-	}
-	
+	if (bSwitchCamera)	SwitchCamera(DeltaTime);
 }
 
 void AGracz2::MoveRight(float Val)
@@ -82,65 +74,86 @@ void AGracz2::MoveRight(float Val)
 
 void AGracz2::Action()
 {
-	if (Corner) {
+	//Sprawdzam w którym naro¿niku znajduje siê gracz i ustawiam odpowienie parametry do zmiany kamery (najwa¿niejsza zmienna to Yaw)
+	//I check in which corner the player is and I set the appropriate parameters to change the camera (the most important variable it Yaw)
+	if (Corner && !bSwitchCamera) {
+		bSwitchCamera = true;
+		//Do Yaw przpisuje lokalizacjê jak¹ ma otrzymaæ kamera, X i Y s³u¿¹ do zmiany ruchu postaci, DirectionCamera odpowiada w którym kierunku ma obróciæ siê kamera.
+		//Assigns a location to the Yaw variable that the camera should receive, X and Y are used to change the character's movement, DirectionCamera is responsible for the direction of camera rotation
 		//Corner --
 		if ((!Corner->AxisX) && (!Corner->AxisY) && (Y==1)) {
 			Yaw = SpringArm->GetComponentRotation().Yaw + 90.f;
-			//EndR = (SpringArm->GetComponentRotation() + FRotator(0.f, Yaw, 0.f));
-			//SpringArm->SetWorldRotation(EndR);
 			X = -1.f;
 			Y = 0.f;
+			DirectionCamera = 1;
 		}
 		else if ((!Corner->AxisX) && (!Corner->AxisY) && (X == -1)) {
 			Yaw = SpringArm->GetComponentRotation().Yaw - 90.f;
-			//EndR = (SpringArm->GetComponentRotation() + FRotator(0.f, Yaw, 0.f));
-			//SpringArm->SetWorldRotation(EndR);
 			X = 0.f;
 			Y = 1.f;
+			DirectionCamera = -1;
 		}
 
-		// Corner -+
-		/*if ((Corner->AxisX) && (!Corner->AxisY) && (Y == 1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, -90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+		// Corner +-
+		if ((Corner->AxisX) && (!Corner->AxisY) && (Y == 1)) {
+			Yaw = SpringArm->GetComponentRotation().Yaw - 90.f;
 			X = 1.f;
 			Y = 0.f;
+			DirectionCamera = -1;
 		}
 		else if ((Corner->AxisX) && (!Corner->AxisY) && (X == 1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, 90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			Yaw = SpringArm->GetComponentRotation().Yaw + 90.f;
 			X = 0.f;
 			Y = 1.f;
+			DirectionCamera = 1;
 		}
 
 		// Corner ++
 		if ((Corner->AxisX) && (Corner->AxisY) && (Y == -1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, 90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			bool bYaw = Yaw < 0;
+			Yaw = bYaw ? SpringArm->GetComponentRotation().Yaw + 90.f : (SpringArm->GetComponentRotation().Yaw * -1) + 90.f;
 			X = 1.f;
 			Y = 0.f;
+			DirectionCamera = 1;
 		}
 		else if ((Corner->AxisX) && (Corner->AxisY) && (X == 1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, -90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			Yaw = SpringArm->GetComponentRotation().Yaw - 90.f;
 			X = 0.f;
 			Y = -1.f;
+			DirectionCamera = -1;
 		}
 
 		// Corner -+
 		if ((!Corner->AxisX) && (Corner->AxisY) && (Y == -1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, -90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			bool bYaw = Yaw >= 0;
+			Yaw = bYaw ? SpringArm->GetComponentRotation().Yaw - 90.f : (SpringArm->GetComponentRotation().Yaw * -1) - 90.f;
 			X = -1.f;
 			Y = 0.f;
+			DirectionCamera = -1;
 		}
 		else if ((!Corner->AxisX) && (Corner->AxisY) && (X == -1)) {
-			FRotator CurrentR = (SpringArm->GetComponentRotation() + FRotator(0.f, 90.f, 0.f));
-			SpringArm->SetWorldRotation(CurrentR);
+			Yaw = SpringArm->GetComponentRotation().Yaw + 90.f;
 			X = 0.f;
 			Y = -1.f;
-		}*/
+			DirectionCamera = 1;
+		}
 	}
+}
+
+void AGracz2::SwitchCamera(float dt)
+{
+	//Obracam kamer¹, Yaw jest wyznacznikiem
+	//I rotate the camera, variable Yaw is the determinant
+	float CurrentR = SpringArm->GetComponentRotation().Yaw;
+	float AddRotation =  dt * 90 * DirectionCamera;
+
+	if (!FMath::IsNearlyEqual(CurrentR, Yaw, 1.5f)) {
+
+		FRotator NewRotation = FRotator(0.f, AddRotation, 0.f);
+		SpringArm->AddLocalRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
+	}
+	else bSwitchCamera = false;
+
 }
 
 // Called to bind functionality to input
