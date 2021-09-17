@@ -27,7 +27,7 @@ AGracz2::AGracz2()
 	SpringArm->SocketOffset = FVector(0.f, 0.f, 60.f);
 	SpringArm->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));
 	SpringArm->bEnableCameraLag = true;
-	SpringArm->CameraLagSpeed = 40.f;
+	SpringArm->CameraLagSpeed = 5.f;
 	SpringArm->SetupAttachment(RootComponent);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -137,7 +137,19 @@ void AGracz2::Action()
 			Y = -1.f;
 			DirectionCamera = 1;
 		}
+
+		//wyœrodkowanie postaci
+
+		GetCharacterMovement()->Velocity = FVector(0.f, 0.f, 0.f);
+		FVector NewLocation = GetCapsuleComponent()->GetRelativeLocation();
+		NewLocation.Y = Corner->GetActorLocation().Y;
+		NewLocation.X = Corner->GetActorLocation().X;
+		GetCapsuleComponent()->SetRelativeLocation(NewLocation);
+		
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Yaw: %f"), Yaw));
+
+	if (Teleport)	Teleport->TepPlayer();
 }
 
 void AGracz2::SwitchCamera(float dt)
@@ -147,7 +159,7 @@ void AGracz2::SwitchCamera(float dt)
 	float CurrentR = SpringArm->GetComponentRotation().Yaw;
 	float AddRotation =  dt * 90 * DirectionCamera;
 
-	if (!FMath::IsNearlyEqual(CurrentR, Yaw, 1.5f)) {
+	if (!FMath::IsNearlyEqual(CurrentR, Yaw, 4.0f)) {
 
 		FRotator NewRotation = FRotator(0.f, AddRotation, 0.f);
 		SpringArm->AddLocalRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
@@ -169,13 +181,9 @@ void AGracz2::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AGracz2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Corner = Cast<ACorner>(OtherActor);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Gracz Wszed³"));
-	
-	
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Gracz Wszedl"));
 }
 
 void AGracz2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	Corner = NULL;
 }

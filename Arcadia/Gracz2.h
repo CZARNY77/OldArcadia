@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Corner.h"
+#include "Teleport.h"
 #include "GameFramework/Character.h"
 #include "Gracz2.generated.h"
 
@@ -35,6 +36,7 @@ public:
 	AGracz2();
 
 	class ACorner* Corner;
+	class ATeleport* Teleport;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
