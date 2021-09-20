@@ -31,12 +31,21 @@ class ARCADIA_API AGracz2 : public ACharacter
 	float Yaw;
 	bool bSwitchCamera;
 	int DirectionCamera;
+
 public:
 	// Sets default values for this character's properties
 	AGracz2();
 
 	class ACorner* Corner;
 	class ATeleport* Teleport;
+
+	int HP;
+
+	UFUNCTION()
+	void Death();
+	UFUNCTION()
+	void TakeDamage();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -47,9 +56,4 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION()
-		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

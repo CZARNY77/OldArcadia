@@ -25,6 +25,7 @@ AGate::AGate()
 	Mesh->SetupAttachment(DummyRoot);
 
 	Keys = 0;
+	MaxKeys = 3;
 
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AGate::OnOverlapBegin);
 }
@@ -33,21 +34,18 @@ AGate::AGate()
 void AGate::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 // Called every frame
 void AGate::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AGate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (AGracz2 * Gracz = Cast<AGracz2>(OtherActor)) {
-		if (Keys == 3) {
+		if (Keys == MaxKeys) {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Wygrales"));
 			UGameplayStatics::OpenLevel(this, "lvl_2");
 		}

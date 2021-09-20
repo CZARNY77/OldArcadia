@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Gate.generated.h"
+#include "Spikes.generated.h"
 
 UCLASS()
-class ARCADIA_API AGate : public AActor
+class ARCADIA_API ASpikes : public AActor
 {
 	GENERATED_BODY()
 
@@ -22,11 +22,7 @@ class ARCADIA_API AGate : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	AGate();
-
-	int Keys;
-	UPROPERTY(EditAnywhere, Category = "Keys")
-	int MaxKeys;
+	ASpikes();
 
 protected:
 	// Called when the game starts or when spawned

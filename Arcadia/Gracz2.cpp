@@ -43,20 +43,36 @@ AGracz2::AGracz2()
 	GetCharacterMovement()->MaxWalkSpeed = 600.f;
 	GetCharacterMovement()->MaxFlySpeed = 300.f;
 
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AGracz2::OnOverlapBegin);
-
 	X = 0.f;
 	Y = 1.f;
 	Yaw = 0.f;
 	bSwitchCamera = false;
+
+	HP = 5;
+}
+
+void AGracz2::Death()
+{
+	//Zrobiæ platformê start, albo przypisywaæ to do jakiegoœ elementu na œwicie
+	X = 0;
+	Y = 1;
+	bSwitchCamera = true;
+	Yaw = 0;
+	GetCapsuleComponent()->SetRelativeLocation(FVector(-500.f, -50.f, 610.f));
+	HP = 5;
+}
+
+void AGracz2::TakeDamage()
+{
+	HP--;
+	if (HP > 0) Jump();
+	else Death();
 }
 
 // Called when the game starts or when spawned
 void AGracz2::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AGracz2::OnOverlapEnd);
 }
 
 // Called every frame
@@ -177,13 +193,4 @@ void AGracz2::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &AGracz2::Action);
-}
-
-void AGracz2::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Black, TEXT("Gracz Wszedl"));
-}
-
-void AGracz2::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
 }
