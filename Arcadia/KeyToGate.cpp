@@ -15,10 +15,8 @@ AKeyToGate::AKeyToGate()
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	Sphere->InitSphereRadius(32.f);
 	Sphere->SetCollisionProfileName("Trigger");
-	//RootComponent = Sphere;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	//Mesh->SetupAttachment(Sphere);
 	RootComponent = Mesh;
 	Sphere->SetupAttachment(Mesh);
 
@@ -45,7 +43,9 @@ void AKeyToGate::Tick(float DeltaTime)
 void AKeyToGate::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (AGracz2* Gracz = Cast<AGracz2>(OtherActor)) {
-		if(Gate)	Gate->Keys++;
+		if (Gate) {
+			Gate->Keys++;
+		}
 		this->Destroy();
 	}
 }

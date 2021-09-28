@@ -8,6 +8,7 @@
 #include "Corner.h"
 #include "Components/CapsuleComponent.h"
 #include "Math.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGracz2::AGracz2()
@@ -53,13 +54,7 @@ AGracz2::AGracz2()
 
 void AGracz2::Death()
 {
-	//Zrobiæ platformê start, albo przypisywaæ to do jakiegoœ elementu na œwicie
-	X = 0;
-	Y = 1;
-	bSwitchCamera = true;
-	Yaw = 0;
-	GetCapsuleComponent()->SetRelativeLocation(FVector(-500.f, -50.f, 610.f));
-	HP = 5;
+	UGameplayStatics::OpenLevel(this, "lvl_2");
 }
 
 void AGracz2::TakeDamage()

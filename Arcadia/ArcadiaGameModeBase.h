@@ -14,4 +14,7 @@ class ARCADIA_API AArcadiaGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	AArcadiaGameModeBase();
+
 };

@@ -14,7 +14,7 @@ class ARCADIA_API AKeyToGate : public AActor
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 	class USphereComponent* Sphere;
-
+	
 	UPROPERTY(EditAnywhere, Category = "Components")
 	class UStaticMeshComponent* Mesh;
 	
@@ -22,7 +22,7 @@ public:
 	// Sets default values for this actor's properties
 	AKeyToGate();
 
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class AGate* Gate;
 
 protected:

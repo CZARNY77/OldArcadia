@@ -2,4 +2,9 @@
 
 
 #include "ArcadiaGameModeBase.h"
+#include "PlayerHUD.h"
 
+AArcadiaGameModeBase::AArcadiaGameModeBase() : Super()
+{
+	HUDClass = APlayerHUD::StaticClass();
+}

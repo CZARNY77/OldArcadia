@@ -24,8 +24,9 @@ public:
 	// Sets default values for this actor's properties
 	AGate();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Keys;
-	UPROPERTY(EditAnywhere, Category = "Keys")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Keys")
 	int MaxKeys;
 
 protected:

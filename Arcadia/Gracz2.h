@@ -39,11 +39,10 @@ public:
 	class ACorner* Corner;
 	class ATeleport* Teleport;
 
+	UPROPERTY(BlueprintReadWrite)
 	int HP;
 
-	UFUNCTION()
 	void Death();
-	UFUNCTION()
 	void TakeDamage();
 
 protected:
